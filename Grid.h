@@ -20,6 +20,7 @@ class Grid {
         void print() const;
         void drawTo(sf::RenderWindow &window) const;
         void setWall(int line, int column);
+        void setWalkable(int line, int column);
         void setWidth(int width);
         void setHeight(int width);
         int getWidth() const;

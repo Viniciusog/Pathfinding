@@ -21,6 +21,8 @@ class Matrix {
         int lines;
         int columns;
         void deleteMatrix();
+        bool lineAndColValid(int line, int column) const;
+
 };
 
 template<class T>
@@ -28,9 +30,9 @@ Matrix<T>::Matrix(int lines, int columns) {
     this->lines = lines;
     this->columns = columns;
 
-    matrix = new T*[columns];
-    for (int i = 0; i < columns; i++) {
-        matrix[i] = new T[lines];
+    matrix = new T*[lines];
+    for (int i = 0; i < lines; i++) {
+        matrix[i] = new T[columns];
     }
 }
 
@@ -43,7 +45,7 @@ template<class T>
 void Matrix<T>::print() const {
     for (int i = 0; i < lines; i++) {
         for ( int j = 0; j < columns; j++) {
-            cout << matrix[j][i] << " ";
+            cout << matrix[i][j] << " ";
         }
         cout << endl;
     }
@@ -51,17 +53,22 @@ void Matrix<T>::print() const {
 
 template<class T>
 void Matrix<T>::add(T element, int line, int column) {
-    matrix[column][line] = element;
+    if (lineAndColValid(line, column)) {
+        matrix[line][column] = element;
+    }
 }
 
 template<class T>
 T Matrix<T>::at(int line, int column) const {
-    return matrix[column][line];
+    if (lineAndColValid(line, column)) {
+        return matrix[line][column];
+    }
+    return nullptr;   
 }
 
 template<class T>
 void Matrix<T>::deleteMatrix() {
-    for (int i = 0; i < columns; i++) {
+    for (int i = 0; i < lines; i++) {
         delete [] matrix[i];
     }
     delete [] this->matrix;
@@ -74,9 +81,9 @@ void Matrix<T>::realocate(int l, int c) {
     this->lines = l;
     this->columns = c;
 
-    this->matrix = new T*[c];
-    for (int i = 0; i < c; i++) {
-        this->matrix[i] = new T[l];
+    this->matrix = new T*[l];
+    for (int i = 0; i < l; i++) {
+        this->matrix[i] = new T[c];
     }
 }
 
@@ -88,6 +95,11 @@ int Matrix<T>::getLines() const {
 template<class T>
 int Matrix<T>::getColumns() const {
     return this->columns;
+}
+
+template<class T>
+bool Matrix<T>::lineAndColValid(int line, int column) const {
+    return line >= 0 && line < this->lines && column >= 0 && column < this->getColumns();
 }
 
 #endif

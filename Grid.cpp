@@ -53,7 +53,7 @@ int Grid::getUnitSize() const {
 void Grid::initGrid() {
     for (int i = 0; i < this->getLines(); i++) {
         for (int j = 0; j < this->getColumns(); j++) {
-            Node *node = new Node(i*unitSize, j*unitSize, false);
+            Node *node = new Node(j*unitSize, i*unitSize, false);
             nodes->add(node, i, j);
         }
     }
@@ -105,9 +105,18 @@ void Grid::drawTo(sf::RenderWindow &window) const {
 }
 
 void Grid::setWall(int line, int column) {
-    nodes->at(line, column)->setIsWall(true);
+    Node *node = nodes->at(line, column);
+    if (node != nullptr) {
+        node->setIsWall(true);
+    } 
 }
 
+void Grid::setWalkable(int line, int column) {
+    Node *node = nodes->at(line, column);
+    if (node != nullptr) {
+        node->setIsWall(false);
+    }
+}
 
 void Grid::print() const {
     cout << "lines: " << getLines() << " Columns: " << getColumns() << endl;

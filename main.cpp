@@ -9,24 +9,22 @@ int main() {
     Matrix<int> matrix(5,5);
     for (int i = 0; i < matrix.getLines(); i++) {
         for (int j = 0; j < matrix.getColumns(); j++) {
-            matrix.add(i*5, j, i);
+            matrix.add(i*5, i, j);
         }
     }
 
-    matrix.print();
-
-    /* int lines = 5;
+    int lines = 5;
     int columns = 5;
 
-    Grid g(20, 200, 200);
+    Grid g(10, 600, 600);
     g.initGrid();
-    g.print();
+    //g.print();
 
     //const sf::Time TimePerFrame = sf::Time::seconds(1.f/60.f);
 
-    const unsigned int FPS = 1;
+    const unsigned int FPS = 1000;
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Path finding!");
+    sf::RenderWindow window(sf::VideoMode(600, 600), "Path finding!");
     window.setFramerateLimit(FPS);
 
     while (window.isOpen())
@@ -39,6 +37,8 @@ int main() {
                 case sf::Event::Closed:
                     window.close();
                     break;
+                case sf::Event::MouseMoved:
+                    cout << "moved" << endl;
                 case sf::Event::MouseButtonPressed:
                     cout << "BOTÃO PRECIONADO" << endl;
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
@@ -49,15 +49,22 @@ int main() {
                         cout << "Y: " << sf::Mouse::getPosition().y << endl;
                         cout << "X util: " << (sf::Mouse::getPosition(window).x) << endl;
                         cout << "Y util: " << (sf::Mouse::getPosition(window).y) << endl;
-
                         int column = sf::Mouse::getPosition(window).x / g.getUnitSize();
                         int line = sf::Mouse::getPosition(window).y / g.getUnitSize();
                         cout << "line: " << line << endl;
                         cout << "column: " << column << endl;
 
-                        g.setWall(column, line);
+                        g.setWalkable(line, column);
+                        
 
-                    } 
+                    } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                        int column = sf::Mouse::getPosition(window).x / g.getUnitSize();
+                        int line = sf::Mouse::getPosition(window).y / g.getUnitSize();
+                        cout << "line: " << line << endl;
+                        cout << "column: " << column << endl;
+
+                        g.setWall(line, column);
+                    }
                     break;
             }           
 
