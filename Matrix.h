@@ -12,7 +12,7 @@ class Matrix {
         ~Matrix();
         T at(int line, int column) const;
         void add(T element, int line, int column);
-        void print() const;
+        virtual void print() const;
         void realocate(int lines, int columns);
         int getLines() const;
         int getColumns() const;

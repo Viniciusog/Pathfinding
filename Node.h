@@ -17,10 +17,10 @@ class Node {
         void setParent(Node *parent);
         int getX() const;
         int getY() const;
-        bool isWall() const;        
         int getG() const;
         int getH() const;
         int getF() const;
+        bool isWall() const;        
         Node *getParent() const;
     private:
         int x;

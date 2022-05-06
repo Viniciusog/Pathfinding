@@ -1,18 +1,17 @@
 #include "Grid.h"
 
-Grid::Grid(int unitSize, int screenWidth, int screenHeight) {
+Grid::Grid(int unitSize, int screenWidth, int screenHeight) 
+    : Matrix(screenHeight / unitSize, screenWidth / unitSize) {
+
     int lines = screenHeight / unitSize;
     int columns = screenWidth / unitSize;
-
-    this->nodes = new Matrix<Node *>(lines, columns);
     this->unitSize = unitSize;
     setWidth(screenWidth);
     setHeight(screenHeight);
 }
 
 Grid::~Grid() {
-    delete nodes;
-    cout << "" << endl;
+    cout << "Grid destructor" << endl;
 }
 
 void Grid::setUnitSize(int unitSize) {
@@ -35,14 +34,6 @@ int Grid::getHeight() const {
     return this->height;
 }
 
-int Grid::getColumns() const {
-    return nodes->getColumns();
-}
-
-int Grid::getLines() const {
-    return nodes->getLines();
-}
-
 int Grid::getUnitSize() const {
     return this->unitSize;
 }
@@ -51,10 +42,10 @@ int Grid::getUnitSize() const {
  * @details Generate matrix of nodes
  */
 void Grid::initGrid() {
-    for (int i = 0; i < this->getLines(); i++) {
-        for (int j = 0; j < this->getColumns(); j++) {
+    for (int i = 0; i < getLines(); i++) {
+        for (int j = 0; j < getColumns(); j++) {
             Node *node = new Node(j*unitSize, i*unitSize, false);
-            nodes->add(node, i, j);
+            add(node, i, j);
         }
     }
 }
@@ -63,11 +54,12 @@ void Grid::initGrid() {
  * @details Draw lines and nodes to the window
  */
 void Grid::drawTo(sf::RenderWindow &window) const {
+    cout << "draw to" << endl;
     /* DRAW NODES */
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
-            Node *node = nodes->at(i, j);
-            sf::RectangleShape  rect;
+            Node *node = at(i, j);
+            sf::RectangleShape rect;
             rect.setSize({(float) unitSize, (float) unitSize});
             rect.setPosition({(float)node->getX(), (float)node->getY()});
             if (node->isWall()) { 
@@ -105,14 +97,14 @@ void Grid::drawTo(sf::RenderWindow &window) const {
 }
 
 void Grid::setWall(int line, int column) {
-    Node *node = nodes->at(line, column);
+    Node *node = at(line, column);
     if (node != nullptr) {
         node->setIsWall(true);
     } 
 }
 
 void Grid::setWalkable(int line, int column) {
-    Node *node = nodes->at(line, column);
+    Node *node = at(line, column);
     if (node != nullptr) {
         node->setIsWall(false);
     }
@@ -122,9 +114,15 @@ void Grid::print() const {
     cout << "lines: " << getLines() << " Columns: " << getColumns() << endl;
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
-            cout << "X:" << nodes->at(i,j)->getX() << ",Y:" <<  nodes->at(i,j)->getY();
+            cout << "X:" << at(i,j)->getX() << ",Y:" << at(i,j)->getY();
             cout << " | ";
         }
         cout << endl;
     }
+}
+
+Node *Grid::getNodeFromWorldPoint(int x, int y) const {
+    int column = x / unitSize;
+    int line = y / unitSize;
+    return at(line, column);
 }
