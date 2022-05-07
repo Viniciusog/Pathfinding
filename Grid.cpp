@@ -26,8 +26,24 @@ void Grid::setHeight(int height) {
     this->height = height;
 }
 
+void Grid::setStartPoint(Node *start) {
+    this->start = start;
+}
+
+void Grid::setEndPoint(Node *end) {
+    this->end = end;
+}
+
 int Grid::getWidth() const {
     return this->width;
+}
+
+Node *Grid::getStartPoint() const {
+    return this->start;
+}
+
+Node *Grid::getEndPoint() const {
+    return this->end;
 }
 
 int Grid::getHeight() const {

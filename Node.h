@@ -17,16 +17,18 @@ class Node {
         void setParent(Node *parent);
         int getX() const;
         int getY() const;
-        int getG() const;
-        int getH() const;
-        int getF() const;
+        int getGCost() const;
+        int getHCost() const;
+        int getFCost() const;
         bool isWall() const;        
         Node *getParent() const;
     private:
         int x;
         int y;
         bool wall;
+        //the distance from the start node
         int g;
+        //the distance from the target(end) node
         int h;
         Node *parent;
 };

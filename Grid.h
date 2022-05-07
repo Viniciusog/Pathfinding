@@ -21,6 +21,10 @@ class Grid : public Matrix<Node *> {
         void setWalkable(int line, int column);
         void setWidth(int width);
         void setHeight(int width);
+        void setStartPoint(Node *start);
+        void setEndPoint(Node *node);
+        Node *getStartPoint() const;
+        Node *getEndPoint() const;
         int getWidth() const;
         int getHeight() const;
         Node *getNodeFromWorldPoint(int x, int y) const;

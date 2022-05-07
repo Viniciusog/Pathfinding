@@ -42,8 +42,16 @@ int Node::getY() const {
     return y;
 }
 
-int Node::getF() const {
-    //tem um outro or para ser considerado
+int Node::getGCost() const {
+    return g;
+}
+
+int Node::getHCost() const {
+    return h;
+}
+
+//Return the general cost of the node
+int Node::getFCost() const {
     return g + h;
 }
 
