@@ -4,9 +4,11 @@
 #include <iostream>
 using namespace std;
 #include <stdlib.h>
+#include <iomanip>
 
 class Node {
     public:
+        bool operator==(const Node &node) const;
         Node(int x, int y, bool isWall);
         ~Node();
         void setG(int g);

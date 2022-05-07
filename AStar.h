@@ -14,7 +14,9 @@ class AStar
 public:
     AStar(Grid *grid);
     ~AStar();
-    Node *getNodeLowestCost() const;
+    bool AStar::nodeIsInTheList(vector<Node *> &list, Node *node) const;
+    Node *getNodeLowestCost(int &position) const;
+    vector<Node *> getNeighbours(Node *current) const;
     void findPath(int startX, int startY, int endX, int endY);
 
 private:

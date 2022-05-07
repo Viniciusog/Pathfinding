@@ -137,6 +137,12 @@ void Grid::print() const {
     }
 }
 
+/*
+if unitSize = 60
+[x=0][x=60][x=120]...
+if x = 65
+int columnPosition = x/unitSize = 65/60 = 1
+*/
 Node *Grid::getNodeFromWorldPoint(int x, int y) const {
     int column = x / unitSize;
     int line = y / unitSize;

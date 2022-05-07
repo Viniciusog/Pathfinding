@@ -58,6 +58,9 @@ void Matrix<T>::add(T element, int line, int column) {
     }
 }
 
+/**
+ * @return Returns nullprt if element is not found
+ */
 template<class T>
 T Matrix<T>::at(int line, int column) const {
     if (lineAndColValid(line, column)) {
@@ -99,7 +102,7 @@ int Matrix<T>::getColumns() const {
 
 template<class T>
 bool Matrix<T>::lineAndColValid(int line, int column) const {
-    return line >= 0 && line < this->lines && column >= 0 && column < this->getColumns();
+    return line >= 0 && line < this->getLines() && column >= 0 && column < this->getColumns();
 }
 
 #endif

@@ -62,3 +62,10 @@ Node* Node::getParent() const {
 bool Node::isWall() const {
     return wall;
 }     
+
+bool Node::operator==(const Node &node) const {
+    if (node.x == this->x && node.y == this->y) {
+        return true;
+    }
+    return false;
+}
