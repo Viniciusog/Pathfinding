@@ -8,6 +8,7 @@ using namespace std;
 
 class Node {
     public:
+        friend ostream& operator<<(ostream &os, const Node &node);
         bool operator==(const Node &node) const;
         Node(int x, int y, bool isWall);
         ~Node();

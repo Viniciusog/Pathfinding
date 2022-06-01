@@ -2,10 +2,14 @@
 
 Grid::Grid(int unitSize, int screenWidth, int screenHeight) 
     : Matrix(screenHeight / unitSize, screenWidth / unitSize) {
+    
+    this->start = nullptr;
+    this->end = nullptr;
 
     int lines = screenHeight / unitSize;
     int columns = screenWidth / unitSize;
     this->unitSize = unitSize;
+    this->setEndPoint(nullptr);
     setWidth(screenWidth);
     setHeight(screenHeight);
 }
@@ -27,6 +31,8 @@ void Grid::setHeight(int height) {
 }
 
 void Grid::setStartPoint(Node *start) {
+    start->setG(0);
+    start->setH(27);
     this->start = start;
 }
 
@@ -54,6 +60,20 @@ int Grid::getUnitSize() const {
     return this->unitSize;
 }
 
+bool Grid::isEndNode(Node *node) const {
+    if (this->getEndPoint() != nullptr) {
+        return *this->getEndPoint() == *node;
+    }
+    return false;
+}
+
+bool Grid::isStartNode(Node *node) const {
+    if (this->getStartPoint() != nullptr) {
+        return *this->getStartPoint() == *node;
+    }
+    return false;
+}
+
 /**
  * @details Generate matrix of nodes
  */
@@ -69,23 +89,34 @@ void Grid::initGrid() {
 /**
  * @details Draw lines and nodes to the window
  */
-void Grid::drawTo(sf::RenderWindow &window) const {
+void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
     cout << "draw to" << endl;
     /* DRAW NODES */
+    sf::RectangleShape rect;
+    rect.setSize({(float) unitSize, (float) unitSize});
+
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
             Node *node = at(i, j);
-            sf::RectangleShape rect;
-            rect.setSize({(float) unitSize, (float) unitSize});
             rect.setPosition({(float)node->getX(), (float)node->getY()});
+            
             if (node->isWall()) { 
                 rect.setFillColor(sf::Color::Black);          
+            } else if (isEndNode(node)) {
+                rect.setFillColor(sf::Color::Blue);
+            } else if (isStartNode(node)) {
+                rect.setFillColor(sf::Color::Magenta);
             } else {
                 rect.setFillColor(sf::Color::Green);
             } 
-           window.draw(rect);
+            window.draw(rect);
         }
     } 
+
+    for (int i = 0; i < path.size(); i++) {
+        rect.setPosition({(float)path.at(i)->getX(), (float)path.at(i)->getY()});
+        rect.setFillColor(sf::Color::Blue);          
+    }
 
     /* DRAW LINES */
     sf::RectangleShape horizontalLine;

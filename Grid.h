@@ -16,13 +16,15 @@ class Grid : public Matrix<Node *> {
         void setUnitSize(int unitSize);
         int getUnitSize() const;
         void print() const;
-        void drawTo(sf::RenderWindow &window) const;
+        void drawTo(vector<Node *> path, sf::RenderWindow &window) const;
         void setWall(int line, int column);
         void setWalkable(int line, int column);
         void setWidth(int width);
         void setHeight(int width);
         void setStartPoint(Node *start);
         void setEndPoint(Node *node);
+        bool isEndNode(Node *node) const;
+        bool isStartNode(Node *node) const;
         Node *getStartPoint() const;
         Node *getEndPoint() const;
         int getWidth() const;

@@ -69,3 +69,8 @@ bool Node::operator==(const Node &node) const {
     }
     return false;
 }
+
+ostream& operator<<(ostream& os, const Node &node) {
+    cout << "X: " << node.getX() << ", Y: " << node.getY() << endl;
+    return os;
+}

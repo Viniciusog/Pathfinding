@@ -14,10 +14,12 @@ class AStar
 public:
     AStar(Grid *grid);
     ~AStar();
-    bool AStar::nodeIsInTheList(vector<Node *> &list, Node *node) const;
+    bool nodeIsInTheList(vector<Node *> &list, Node *node) const;
     Node *getNodeLowestCost(int &position) const;
     vector<Node *> getNeighbours(Node *current) const;
+    int getDistance(Node *nodeA, Node *nodeB) const;
     void findPath(int startX, int startY, int endX, int endY);
+    vector<Node *>getPath(Node *endNode) const;
 
 private:
     Grid *grid;

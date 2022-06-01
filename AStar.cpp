@@ -1,4 +1,5 @@
 #include "AStar.h"
+#include "cmath"
 
 AStar::AStar(Grid *grid) {
     this->grid = grid;
@@ -24,6 +25,8 @@ bool AStar::nodeIsInTheList(vector<Node *> &list, Node *node) const {
 Node *AStar::getNodeLowestCost(int &position) const {
     if (openList.size() > 0) {
         Node *node = openList.at(0);
+        position = 0;
+        cout << "openList size: " << openList.size() << endl;
         for (int i = 1; i < openList.size(); i++) {
             // if f costs are equal, then look for the lowest h cost
             if (openList.at(i)->getFCost() < node->getFCost() || 
@@ -34,7 +37,7 @@ Node *AStar::getNodeLowestCost(int &position) const {
         }
         return node;
     }
-    position = NULL;
+    position = -1;
     return nullptr;
 }
 
@@ -42,8 +45,8 @@ vector<Node *> AStar::getNeighbours(Node *current) const {
     vector<Node *> neighbours;
 
     //3x3 blocks
-    for (int y = -1; y <= 1; y++) {
-        for (int x = -1; x <= 1; x++) {
+    for (int y = -1; y <= 1; y++) { //for each line
+        for (int x = -1; x <= 1; x++) { // for each column
             //not include the current node
             if (!(x == 0 && y == 0)) {
                 int realX = current->getX() + x*grid->getUnitSize();
@@ -61,33 +64,112 @@ vector<Node *> AStar::getNeighbours(Node *current) const {
     return neighbours;
 }
 
+int AStar::getDistance(Node *nodeA, Node *nodeB) const {
+    int x, y;
+    x = abs(nodeA->getX() - nodeB->getX());
+    y = abs(nodeA->getY() - nodeB->getY());
+
+    int unitSize = grid->getUnitSize();
+
+    if (x > y) {
+        //14y + 10(x-y)
+        return y/unitSize * 14 + (x-y)/unitSize * 10;
+    } 
+    //14x + 10(y-x)
+    return x/unitSize * 14 + (y-x)/unitSize * 10;
+}
 
 void AStar::findPath(int startX, int startY, int endX, int endY) {
     Node *start = grid->getNodeFromWorldPoint(startX, startY);
     Node *end = grid->getNodeFromWorldPoint(endX, endY);
+
+    cout << "is end a wall:" << end->isWall() << endl;
+    int co;
+    cin >> co;
+
+    cout << *start << endl;
+    cout << *end << endl;
+    int continuar;
+    cout << "Continuar?" << endl;
+    cin >> continuar;
 
     openList.push_back(start);
 
     while (openList.size() > 0) {
         int position;
         Node *current = getNodeLowestCost(position);
-        if (position != NULL) {
+        cout << "[";
+        for (int i = 0; i < openList.size(); i++) {
+            cout << openList.at(i)->getHCost() << ", ";
+        }
+        cout << "]" << endl;
+        cout << "Position: " << position << endl;
+        if (position != -1) {
             openList.erase(openList.begin() + position);
         }
         closedList.push_back(current);
 
-        if (current == end) {
-            continue;
+        if (current->getX() == end->getX() && current->getY() == end->getY()) {
+            cout << "SÃO IGUAIS" << endl;
+            int iguais;
+            cin >> iguais;
+        }
+
+        if (*current == *end) {
+            cout << "ENCONTROU O LOCAL---------------------------------------------" << endl;
+            int continuar;
+            cin >> continuar;
+            // When we find the end node
+            //continue;
         }
 
         vector<Node *> neighbours = getNeighbours(current);
+        cout << "Vizinhos: " << neighbours.size() << endl;
+        /* cout << "QTD VIZINHOS: " << neighbours.size() << endl;
+        cout << "Current h cost: " << current->getHCost() << endl; */
         for (int i = 0; i < neighbours.size(); i++) {
             Node *neighbour = neighbours.at(i);
-
             // estou na dúvida se assim funciona ou se tem que passar como sendo ponteiro;
-            if (neighbour->isWall() || nodeIsInTheList(openList, neighbour)) {
-
+            if (neighbour->isWall() || nodeIsInTheList(closedList, neighbour)) {
+                continue;
             }
-        }
-    } 
+
+            // calculate the new g cost if the new path to the node is shorter
+            int gCostToNeighbour = current->getGCost() + getDistance(current, neighbour);
+            if (!nodeIsInTheList(openList, neighbour) || gCostToNeighbour < neighbour->getGCost()) {
+                neighbour->setG(gCostToNeighbour);
+                neighbour->setH(getDistance(neighbour, end));
+                neighbour->setParent(current);
+
+                if (!nodeIsInTheList(openList, neighbour)) {
+                    openList.push_back(neighbour);
+                }
+            }
+        } 
+    }  
+
+    int algo;
+    cout << "Acabou: " << endl;
+    cin >> algo;
+}
+
+vector<Node *> AStar::getPath(Node *endNode) const {
+/*     cout << "getPath - inicio" << endl;
+ */    vector<Node *> path;
+    vector<Node*> reversedPath;
+
+    Node *current = endNode;
+
+    while (current != nullptr && current->getParent() != nullptr) {
+        path.push_back(current);
+        current = current->getParent();
+    }
+
+    for (int i = path.size() - 1; i >= 0; i--) {
+        reversedPath.push_back(path.at(i));
+    }
+
+    /* cout << "getPath - fim" << endl;    */
+    cout << "Path size: " << reversedPath.size() << endl;
+    return reversedPath;
 }
