@@ -109,12 +109,6 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
         }
         closedList.push_back(current);
 
-        if (current->getX() == end->getX() && current->getY() == end->getY()) {
-            cout << "SÃO IGUAIS" << endl;
-            int iguais;
-            cin >> iguais;
-        }
-
         if (*current == *end) {
             cout << "ENCONTROU O LOCAL---------------------------------------------" << endl;
             int continuar;
@@ -129,7 +123,7 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
         cout << "Current h cost: " << current->getHCost() << endl; */
         for (int i = 0; i < neighbours.size(); i++) {
             Node *neighbour = neighbours.at(i);
-            // estou na dúvida se assim funciona ou se tem que passar como sendo ponteiro;
+            
             if (neighbour->isWall() || nodeIsInTheList(closedList, neighbour)) {
                 continue;
             }

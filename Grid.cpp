@@ -31,8 +31,11 @@ void Grid::setHeight(int height) {
 }
 
 void Grid::setStartPoint(Node *start) {
-    start->setG(0);
-    start->setH(27);
+    // when click is out of the screen
+    if (start != nullptr) {
+        start->setG(0);
+        start->setH(27);
+    }
     this->start = start;
 }
 
@@ -145,7 +148,9 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
 
 void Grid::setWall(int line, int column) {
     Node *node = at(line, column);
-    if (node != nullptr) {
+    // parei aqui para somente setar que é uma parede se não for o início nem o final, continuar a alteração para seWall
+    // no arquivo engine.cpp, para que possa setar uma parede sem ter que setar um nó final primeiro
+    if (node != nullptr && !isEndNode(node) && !isStartNode(node)) {
         node->setIsWall(true);
     } 
 }

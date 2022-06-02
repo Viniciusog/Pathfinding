@@ -56,6 +56,16 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
             case Event::Closed:
                 window.close();
                 break;
+            case Event::KeyPressed:
+                if (Keyboard::isKeyPressed(Keyboard::A)) {
+                    cout << "A" << endl;
+                    Node *start = grid.getStartPoint();
+                    Node *end = grid.getEndPoint();
+
+                    if (start != nullptr && end != nullptr) {
+                        aStar.findPath(start->getX(), start->getY(), end->getX(), end->getY());
+                    }
+                } 
             case Event::MouseMoved:
             case Event::MouseButtonPressed:
                 if (Mouse::isButtonPressed(Mouse::Right)) {     
@@ -63,18 +73,8 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
                     int line = Mouse::getPosition(window).y / grid.getUnitSize();
                     grid.setWalkable(line, column);
                 } else if (Mouse::isButtonPressed(Mouse::Left)) {
-                    
-                    /* case Event::KeyPressed:
                         cout << "KEY PRESSED" << endl;
-                        if (Keyboard::isKeyPressed(Keyboard::A)) {
-                            cout << "A" << endl;
-                            Node *start = grid.getStartPoint();
-                            Node *end = grid.getEndPoint();
-
-                            if (start != nullptr && end != nullptr) {
-                                aStar.findPath(start->getX(), start->getY(), end->getX(), end->getY());
-                            }
-                        } else if (Keyboard::isKeyPressed(Keyboard::S)) {
+                        if (Keyboard::isKeyPressed(Keyboard::S)) {
                             cout << "S" << endl;
                             int column = Mouse::getPosition(window).x / grid.getUnitSize();
                             int line = Mouse::getPosition(window).y / grid.getUnitSize();
@@ -85,7 +85,10 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
                             int column = Mouse::getPosition(window).x / grid.getUnitSize();
                             int line = Mouse::getPosition(window).y / grid.getUnitSize();
                             grid.setEndPoint(grid.at(line, column));
-                        }  */
+                        } 
+
+
+                    // testar para setar nó inicial e nó final
 
                     int x = Mouse::getPosition(window).x;
                     int y = Mouse::getPosition(window).y;
