@@ -93,7 +93,6 @@ void Grid::initGrid() {
  * @details Draw lines and nodes to the window
  */
 void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
-    cout << "draw to" << endl;
     /* DRAW NODES */
     sf::RectangleShape rect;
     rect.setSize({(float) unitSize, (float) unitSize});
@@ -106,7 +105,7 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
             if (node->isWall()) { 
                 rect.setFillColor(sf::Color::Black);          
             } else if (isEndNode(node)) {
-                rect.setFillColor(sf::Color::Blue);
+                rect.setFillColor(sf::Color::Cyan);
             } else if (isStartNode(node)) {
                 rect.setFillColor(sf::Color::Magenta);
             } else {
@@ -118,7 +117,8 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
 
     for (int i = 0; i < path.size(); i++) {
         rect.setPosition({(float)path.at(i)->getX(), (float)path.at(i)->getY()});
-        rect.setFillColor(sf::Color::Blue);          
+        rect.setFillColor(sf::Color::Blue);     
+        window.draw(rect);
     }
 
     /* DRAW LINES */

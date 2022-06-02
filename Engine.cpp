@@ -21,7 +21,7 @@ void Engine::run() {
     int lines = 5;
     int columns = 5;
 
-    Grid g(120, 600, 600);
+    Grid g(20, 600, 600);
     g.initGrid();
 
     const unsigned int FPS = 60;
@@ -41,7 +41,6 @@ void Engine::run() {
 void Engine::draw(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
     //cout << "draw" << endl;
     Node *endNode = grid.getEndPoint();
-    cout << (endNode == nullptr ? "PONTEIRO NULO" : "PONTEIRO NORMAL") << endl;
     grid.drawTo(aStar.getPath(grid.getEndPoint()), window);
     window.display();
     window.clear();
@@ -97,14 +96,8 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
 
                     Node *node = grid.getNodeFromWorldPoint(x, y);
                     // if its not the end node, then set node as wall
-                    if (grid.getEndPoint() != nullptr) {
-                        cout << "---------------------------------------------------" << endl;
-                        if (!(*node == *grid.getEndPoint())) {
-                            grid.setWall(line, column);
-                        } 
-                    } else {
-                        cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-                    }
+                
+                    grid.setWall(line, column);                  
                 }
                 break;
         }   

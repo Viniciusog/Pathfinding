@@ -64,6 +64,12 @@ vector<Node *> AStar::getNeighbours(Node *current) const {
     return neighbours;
 }
 
+// info: pointers are just destroyed at destructor
+void AStar::clearOpenClosedList() {
+    openList.clear();
+    closedList.clear();
+}
+
 int AStar::getDistance(Node *nodeA, Node *nodeB) const {
     int x, y;
     x = abs(nodeA->getX() - nodeB->getX());
@@ -83,27 +89,27 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
     Node *start = grid->getNodeFromWorldPoint(startX, startY);
     Node *end = grid->getNodeFromWorldPoint(endX, endY);
 
-    cout << "is end a wall:" << end->isWall() << endl;
+    /* cout << "is end a wall:" << end->isWall() << endl;
     int co;
-    cin >> co;
+    cin >> co; */
 
-    cout << *start << endl;
+    /* cout << *start << endl;
     cout << *end << endl;
     int continuar;
     cout << "Continuar?" << endl;
-    cin >> continuar;
+    cin >> continuar; */
 
     openList.push_back(start);
 
     while (openList.size() > 0) {
         int position;
         Node *current = getNodeLowestCost(position);
-        cout << "[";
+        /* cout << "[";
         for (int i = 0; i < openList.size(); i++) {
             cout << openList.at(i)->getHCost() << ", ";
         }
         cout << "]" << endl;
-        cout << "Position: " << position << endl;
+        cout << "Position: " << position << endl; */
         if (position != -1) {
             openList.erase(openList.begin() + position);
         }
@@ -111,19 +117,16 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
 
         if (*current == *end) {
             cout << "ENCONTROU O LOCAL---------------------------------------------" << endl;
-            int continuar;
-            cin >> continuar;
-            // When we find the end node
-            //continue;
+            continue;
         }
 
         vector<Node *> neighbours = getNeighbours(current);
-        cout << "Vizinhos: " << neighbours.size() << endl;
+        /* cout << "Vizinhos: " << neighbours.size() << endl; */
         /* cout << "QTD VIZINHOS: " << neighbours.size() << endl;
         cout << "Current h cost: " << current->getHCost() << endl; */
         for (int i = 0; i < neighbours.size(); i++) {
             Node *neighbour = neighbours.at(i);
-            
+
             if (neighbour->isWall() || nodeIsInTheList(closedList, neighbour)) {
                 continue;
             }
@@ -142,17 +145,17 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
         } 
     }  
 
-    int algo;
-    cout << "Acabou: " << endl;
-    cin >> algo;
+    // clearOpenClosedList();
 }
 
 vector<Node *> AStar::getPath(Node *endNode) const {
-/*     cout << "getPath - inicio" << endl;
- */    vector<Node *> path;
+    vector<Node *> path;
     vector<Node*> reversedPath;
 
     Node *current = endNode;
+    if (endNode != nullptr) {
+        current = current->getParent();
+    }
 
     while (current != nullptr && current->getParent() != nullptr) {
         path.push_back(current);
