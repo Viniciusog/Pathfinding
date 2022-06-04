@@ -3,8 +3,11 @@
 
 #include <iostream>
 using namespace std;
+#include <iostream>
+#include <fstream>
 #include <vector>
 #include "Node.h"
+#include <string>
 #include "Matrix.h"
 #include <SFML/Graphics.hpp>
 
@@ -25,8 +28,11 @@ class Grid : public Matrix<Node *> {
         void setEndPoint(Node *node);
         bool isEndNode(Node *node) const;
         bool isStartNode(Node *node) const;
+        void saveInFile() const;
         Node *getStartPoint() const;
         Node *getEndPoint() const;
+        void saveInFile() const;
+        void readFromFile();
         int getWidth() const;
         int getHeight() const;
         Node *getNodeFromWorldPoint(int x, int y) const;

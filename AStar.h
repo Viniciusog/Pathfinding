@@ -18,11 +18,14 @@ public:
     Node *getNodeLowestCost(int &position) const;
     vector<Node *> getNeighbours(Node *current) const;
     int getDistance(Node *nodeA, Node *nodeB) const;
+    void reset();
     void clearOpenClosedList();
     void findPath(int startX, int startY, int endX, int endY);
     vector<Node *>getPath(Node *endNode) const;
+    bool getPathFound() const;
 
 private:
+    bool pathFound;
     Grid *grid;
     vector<Node *> openList;
     vector<Node *> closedList;

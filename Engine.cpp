@@ -64,21 +64,27 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
                     if (start != nullptr && end != nullptr) {
                         aStar.findPath(start->getX(), start->getY(), end->getX(), end->getY());
                     }
-                } 
+                } else if (Keyboard::isKeyPressed(Keyboard::R)) {
+                    aStar.reset();
+                }
             case Event::MouseMoved:
             case Event::MouseButtonPressed:
                 if (Mouse::isButtonPressed(Mouse::Right)) {     
-                    int column = Mouse::getPosition(window).x / grid.getUnitSize();
-                    int line = Mouse::getPosition(window).y / grid.getUnitSize();
-                    grid.setWalkable(line, column);
+                    if (!aStar.getPathFound()) {
+                        int column = Mouse::getPosition(window).x / grid.getUnitSize();
+                        int line = Mouse::getPosition(window).y / grid.getUnitSize();
+                        grid.setWalkable(line, column);
+                    }                
                 } else if (Mouse::isButtonPressed(Mouse::Left)) {
                         cout << "KEY PRESSED" << endl;
                         if (Keyboard::isKeyPressed(Keyboard::S)) {
-                            cout << "S" << endl;
-                            int column = Mouse::getPosition(window).x / grid.getUnitSize();
-                            int line = Mouse::getPosition(window).y / grid.getUnitSize();
-                            cout << "Line: " << line << ", Column: " << column << endl;
-                            grid.setStartPoint(grid.at(line, column));
+                            if (!aStar.getPathFound()) {
+                                cout << "S" << endl;
+                                int column = Mouse::getPosition(window).x / grid.getUnitSize();
+                                int line = Mouse::getPosition(window).y / grid.getUnitSize();
+                                cout << "Line: " << line << ", Column: " << column << endl;
+                                grid.setStartPoint(grid.at(line, column));
+                            }
                         } else if (Keyboard::isKeyPressed(Keyboard::E)) {
                             cout << "E" << endl;
                             int column = Mouse::getPosition(window).x / grid.getUnitSize();
@@ -96,8 +102,12 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
 
                     Node *node = grid.getNodeFromWorldPoint(x, y);
                     // if its not the end node, then set node as wall
-                
-                    grid.setWall(line, column);                  
+
+                    // only set walls when path is not found and when A or E is not pressed
+                    if (!aStar.getPathFound() && !Keyboard::isKeyPressed(Keyboard::S) 
+                    && !Keyboard::isKeyPressed(Keyboard::E)) {
+                        grid.setWall(line, column); 
+                    }         
                 }
                 break;
         }   

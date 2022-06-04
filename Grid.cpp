@@ -89,6 +89,35 @@ void Grid::initGrid() {
     }
 }
 
+void Grid::saveInFile() const {
+    cout << "Save in file" << endl;
+}
+
+void Grid::readFromFile() {
+    ifstream myFile("lab.txt");
+    std::string myLine;
+    int indexChar;
+    int indexStart = 0;
+    while (myFile.good()) {
+        getline(myFile, myLine);
+        indexChar = myLine.find(",");
+        while (indexChar != std::string::npos) {
+            string substring = myLine.substr(indexStart, indexChar);
+            cout << "Substring: " << substring << endl;
+            // the next start is after ,
+            indexStart = indexChar + 1;
+        }
+    }
+    
+
+    for (int i = 0; i < this->getLines(); i++) {
+        for (int j = 0; j < this->getColumns(); j++) {
+            Node *node = at(i, j);
+            node->setIsWall(true);
+        }
+    }
+}
+
 /**
  * @details Draw lines and nodes to the window
  */

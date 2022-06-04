@@ -22,6 +22,10 @@ bool AStar::nodeIsInTheList(vector<Node *> &list, Node *node) const {
     return false;
 }
 
+bool AStar::getPathFound() const {
+    return this->pathFound;
+}
+
 Node *AStar::getNodeLowestCost(int &position) const {
     if (openList.size() > 0) {
         Node *node = openList.at(0);
@@ -64,8 +68,14 @@ vector<Node *> AStar::getNeighbours(Node *current) const {
     return neighbours;
 }
 
-// info: pointers are just destroyed at destructor
+// executed when reset key is pressed
 void AStar::clearOpenClosedList() {
+    for (int i = 0; i < openList.size(); i++) {
+        openList.at(i)->setParent(nullptr);
+    }
+    for (int i = 0; i < closedList.size(); i++) {
+        closedList.at(i)->setParent(nullptr);
+    }
     openList.clear();
     closedList.clear();
 }
@@ -83,6 +93,11 @@ int AStar::getDistance(Node *nodeA, Node *nodeB) const {
     } 
     //14x + 10(y-x)
     return x/unitSize * 14 + (y-x)/unitSize * 10;
+}
+
+void AStar::reset() {
+    this->pathFound = false;
+    clearOpenClosedList();
 }
 
 void AStar::findPath(int startX, int startY, int endX, int endY) {
@@ -144,8 +159,7 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
             }
         } 
     }  
-
-    // clearOpenClosedList();
+    pathFound = true;
 }
 
 vector<Node *> AStar::getPath(Node *endNode) const {
