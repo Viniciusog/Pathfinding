@@ -7,6 +7,7 @@ using namespace std;
 #include "SFML/Graphics.hpp"
 #include "windows.h"
 #include "AStar.h"
+#include "ValidElement.h"
 
 class Engine {
     public:

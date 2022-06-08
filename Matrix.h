@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <map>
+#include "ValidElement.h"
 using namespace std;
 
 template <class T>
@@ -10,7 +12,7 @@ class Matrix {
     public:
         Matrix(int lines, int columns);
         ~Matrix();
-        T at(int line, int column) const;
+        ValidElement<T> at(int line, int column) const;
         void add(T element, int line, int column);
         virtual void print() const;
         void realocate(int lines, int columns);
@@ -62,11 +64,14 @@ void Matrix<T>::add(T element, int line, int column) {
  * @return Returns nullprt if element is not found
  */
 template<class T>
-T Matrix<T>::at(int line, int column) const {
+ValidElement<T> Matrix<T>::at(int line, int column) const {
+    ValidElement<T> myElement;
+
     if (lineAndColValid(line, column)) {
-        return matrix[line][column];
+        myElement.setIsValid(true);
+        myElement.setElement(matrix[line][column]);
     }
-    return nullptr;   
+    return myElement;   
 }
 
 template<class T>

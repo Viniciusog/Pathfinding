@@ -83,13 +83,20 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
                                 int column = Mouse::getPosition(window).x / grid.getUnitSize();
                                 int line = Mouse::getPosition(window).y / grid.getUnitSize();
                                 cout << "Line: " << line << ", Column: " << column << endl;
-                                grid.setStartPoint(grid.at(line, column));
+                                ValidElement<Node *> obj = grid.at(line, column);
+                                if (obj.isValid()) {
+                                    grid.setStartPoint(obj.getElement());
+                                }
                             }
                         } else if (Keyboard::isKeyPressed(Keyboard::E)) {
                             cout << "E" << endl;
                             int column = Mouse::getPosition(window).x / grid.getUnitSize();
                             int line = Mouse::getPosition(window).y / grid.getUnitSize();
-                            grid.setEndPoint(grid.at(line, column));
+                            //if the node in the (x,y) exists
+                            ValidElement<Node *> obj = grid.at(line, column);
+                            if (obj.isValid()) {
+                                grid.setEndPoint(obj.getElement());
+                            }                            
                         } 
 
 

@@ -10,6 +10,7 @@ using namespace std;
 #include <string>
 #include "Matrix.h"
 #include <SFML/Graphics.hpp>
+#include "ValidElement.h"
 
 class Grid : public Matrix<Node *> {
     public:
@@ -31,8 +32,8 @@ class Grid : public Matrix<Node *> {
         void saveInFile() const;
         Node *getStartPoint() const;
         Node *getEndPoint() const;
-        void saveInFile() const;
-        void readFromFile();
+        //void saveInFile() const;
+        //void readFromFile();
         int getWidth() const;
         int getHeight() const;
         Node *getNodeFromWorldPoint(int x, int y) const;

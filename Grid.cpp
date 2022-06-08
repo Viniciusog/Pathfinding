@@ -93,7 +93,7 @@ void Grid::saveInFile() const {
     cout << "Save in file" << endl;
 }
 
-void Grid::readFromFile() {
+/* void Grid::readFromFile() {
     ifstream myFile("lab.txt");
     std::string myLine;
     int indexChar;
@@ -116,7 +116,7 @@ void Grid::readFromFile() {
             node->setIsWall(true);
         }
     }
-}
+} */
 
 /**
  * @details Draw lines and nodes to the window
@@ -128,7 +128,8 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
 
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
-            Node *node = at(i, j);
+            //just get the element because we know the line and col are valid
+            Node *node = at(i, j).getElement();
             rect.setPosition({(float)node->getX(), (float)node->getY()});
             
             if (node->isWall()) { 
@@ -176,26 +177,31 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
 }
 
 void Grid::setWall(int line, int column) {
-    Node *node = at(line, column);
-    // parei aqui para somente setar que é uma parede se não for o início nem o final, continuar a alteração para seWall
-    // no arquivo engine.cpp, para que possa setar uma parede sem ter que setar um nó final primeiro
-    if (node != nullptr && !isEndNode(node) && !isStartNode(node)) {
+    ValidElement<Node *> obj = at(line, column);
+    /* only sets the node as wall it is valid  */
+    Node *node = obj.getElement();
+
+    if (obj.isValid() && !isEndNode(node) && !isStartNode(node)) {
         node->setIsWall(true);
-    } 
+    }
 }
 
 void Grid::setWalkable(int line, int column) {
-    Node *node = at(line, column);
-    if (node != nullptr) {
+    ValidElement<Node *> obj = at(line, column);
+
+    if (obj.isValid()) {
+        Node *node = obj.getElement();
         node->setIsWall(false);
     }
 }
 
 void Grid::print() const {
+    Node *node;
     cout << "lines: " << getLines() << " Columns: " << getColumns() << endl;
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
-            cout << "X:" << at(i,j)->getX() << ",Y:" << at(i,j)->getY();
+            node = at(i, j).getElement();
+            cout << "X:" << node->getX() << ",Y:" << node->getY();
             cout << " | ";
         }
         cout << endl;
@@ -203,6 +209,7 @@ void Grid::print() const {
 }
 
 /*
+explanation
 if unitSize = 60
 [x=0][x=60][x=120]...
 if x = 65
@@ -211,5 +218,6 @@ int columnPosition = x/unitSize = 65/60 = 1
 Node *Grid::getNodeFromWorldPoint(int x, int y) const {
     int column = x / unitSize;
     int line = y / unitSize;
-    return at(line, column);
+    ValidElement<Node *> obj = at(line, column);
+    return obj.isValid() ? obj.getElement() : nullptr;
 }
