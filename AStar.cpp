@@ -1,8 +1,9 @@
 #include "AStar.h"
 #include "cmath"
 
-AStar::AStar(Grid *grid) {
+AStar::AStar(Grid *grid, sf::RenderWindow *wi) {
     this->grid = grid;
+    this->wi = wi;
 }
 
 AStar::~AStar() {
@@ -30,7 +31,7 @@ Node *AStar::getNodeLowestCost(int &position) const {
     if (openList.size() > 0) {
         Node *node = openList.at(0);
         position = 0;
-        cout << "openList size: " << openList.size() << endl;
+        //cout << "openList size: " << openList.size() << endl;
         for (int i = 1; i < openList.size(); i++) {
             // if f costs are equal, then look for the lowest h cost
             if (openList.at(i)->getFCost() < node->getFCost() || 
@@ -100,6 +101,11 @@ void AStar::reset() {
     clearOpenClosedList();
 }
 
+
+sf::RenderWindow * AStar::getWindow() const {
+    return this->wi;
+}
+
 void AStar::findPath(int startX, int startY, int endX, int endY) {
     Node *start = grid->getNodeFromWorldPoint(startX, startY);
     Node *end = grid->getNodeFromWorldPoint(endX, endY);
@@ -128,11 +134,14 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
         if (position != -1) {
             openList.erase(openList.begin() + position);
         }
+
         closedList.push_back(current);
+        this->grid->drawFindingPath(openList, closedList, *getWindow());
 
         if (*current == *end) {
             cout << "ENCONTROU O LOCAL---------------------------------------------" << endl;
-            continue;
+            pathFound = true;
+            break;
         }
 
         vector<Node *> neighbours = getNeighbours(current);
@@ -140,6 +149,7 @@ void AStar::findPath(int startX, int startY, int endX, int endY) {
         /* cout << "QTD VIZINHOS: " << neighbours.size() << endl;
         cout << "Current h cost: " << current->getHCost() << endl; */
         for (int i = 0; i < neighbours.size(); i++) {
+            //cout << endl << "PROCESSANDO NODE " << i << endl;
             Node *neighbour = neighbours.at(i);
 
             if (neighbour->isWall() || nodeIsInTheList(closedList, neighbour)) {
@@ -181,6 +191,6 @@ vector<Node *> AStar::getPath(Node *endNode) const {
     }
 
     /* cout << "getPath - fim" << endl;    */
-    cout << "Path size: " << reversedPath.size() << endl;
+    //cout << "Path size: " << reversedPath.size() << endl;
     return reversedPath;
 }

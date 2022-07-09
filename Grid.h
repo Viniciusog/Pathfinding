@@ -20,7 +20,8 @@ class Grid : public Matrix<Node *> {
         void setUnitSize(int unitSize);
         int getUnitSize() const;
         void print() const;
-        void drawTo(vector<Node *> path, sf::RenderWindow &window) const;
+        void drawTo(vector<Node *> path, sf::RenderWindow &window);
+        void drawFindingPath(vector<Node *> openList, vector<Node *> closedList, sf::RenderWindow &window);
         void setWall(int line, int column);
         void setWalkable(int line, int column);
         void setWidth(int width);

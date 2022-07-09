@@ -90,7 +90,23 @@ void Grid::initGrid() {
 }
 
 void Grid::saveInFile() const {
-    cout << "Save in file" << endl;
+    ofstream file("saida.txt");
+    file.clear();
+    ValidElement<Node*> value;
+    for (int i = 0; i < getLines(); i++) {
+        for (int j = 0; j < getColumns(); j++) {
+            value = at(i, j);
+            int isWall = value.getElement()->isWall();
+            /* if is the last column */
+            if (j == getColumns() - 1) {
+               file << isWall;  
+            } else {
+               file << isWall << ",";
+            } 
+        }   
+        file << endl;
+    }
+    cout << "saved in file" << endl;
 }
 
 /* void Grid::readFromFile() {
@@ -121,11 +137,12 @@ void Grid::saveInFile() const {
 /**
  * @details Draw lines and nodes to the window
  */
-void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
+void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) {
     /* DRAW NODES */
     sf::RectangleShape rect;
     rect.setSize({(float) unitSize, (float) unitSize});
-
+    
+  
     for (int i = 0; i < getLines(); i++) {
         for (int j = 0; j < getColumns(); j++) {
             //just get the element because we know the line and col are valid
@@ -144,7 +161,7 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
             window.draw(rect);
         }
     } 
-
+    
     for (int i = 0; i < path.size(); i++) {
         rect.setPosition({(float)path.at(i)->getX(), (float)path.at(i)->getY()});
         rect.setFillColor(sf::Color::Blue);     
@@ -173,7 +190,81 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) const {
     //last horizontal line
     horizontalLine.setPosition({0, (float) window.getSize().y - 1});
     window.draw(horizontalLine);
+}
 
+void Grid::drawFindingPath(vector<Node *> openList, vector<Node *> closedList, sf::RenderWindow &window) {
+    sf::RectangleShape rect;
+    rect.setSize({(float) this->getColumns() * unitSize, (float) this->getLines() * unitSize});
+    rect.setFillColor(sf::Color::Green);
+    window.draw(rect);
+
+    rect.setSize({(float) unitSize, (float) unitSize});
+
+    for (int i = 0; i < getLines(); i++) {
+        for (int j = 0; j < getColumns(); j++) {
+            //just get the element because we know the line and col are valid
+            Node *node = at(i, j).getElement();
+            rect.setPosition({(float)node->getX(), (float)node->getY()});
+            
+            if (node->isWall()) { 
+                // cout <<  "É parede! " << endl;
+                rect.setFillColor(sf::Color::Black); 
+                window.draw(rect);         
+            } else if (isEndNode(node)) {
+                rect.setFillColor(sf::Color::Cyan);
+                window.draw(rect);   
+            } else if (isStartNode(node)) {
+                rect.setFillColor(sf::Color::Magenta);
+                window.draw(rect);   
+            }          
+        }
+    } 
+
+    for (int i = 0; i < openList.size(); i++) {
+        Node *node = openList.at(i);
+        if (*node == *getStartPoint() || *node == *getEndPoint()) {
+            continue;
+        }
+        rect.setPosition({(float)node->getX(), (float)node->getY()});
+        rect.setFillColor(sf::Color::Red);
+        window.draw(rect);
+    }
+
+    for (int i = 0; i < closedList.size(); i++) {
+        Node *node = closedList.at(i);
+        if (*node == *getStartPoint() || *node == *getEndPoint()) {
+            continue;
+        }
+        rect.setPosition({(float)node->getX(), (float)node->getY()});
+        rect.setFillColor(sf::Color::Yellow);
+        window.draw(rect);
+    }
+
+    /* DRAW LINES */
+    sf::RectangleShape horizontalLine;
+    for (int i = 0; i < getLines(); i++) {
+        horizontalLine.setSize({(float) getWidth(), 1.0});
+        horizontalLine.setPosition(0, i*unitSize);
+        window.draw(horizontalLine);
+    }
+
+    sf::RectangleShape verticalLine;
+    for(int i = 0; i < getColumns(); i++) {
+        verticalLine.setSize({1.0,(float) getHeight()});
+        verticalLine.setPosition({(float)i*unitSize, 0.0});
+        window.draw(verticalLine);
+    }
+
+    //last vertical line
+    verticalLine.setPosition({(float) window.getSize().x - 1, 1.0});
+    window.draw(verticalLine);
+
+    //last horizontal line
+    horizontalLine.setPosition({0, (float) window.getSize().y - 1});
+    window.draw(horizontalLine);
+
+    window.display();
+    window.clear();
 }
 
 void Grid::setWall(int line, int column) {

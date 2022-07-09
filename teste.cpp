@@ -16,7 +16,7 @@ vector<string> split(string str, string separator) {
     vector<string> list;
     while (indexChar != std::string::npos) {
         string part = str.substr(indexStart, indexChar-indexStart);
-        cout << part << endl;
+        //cout << part << endl;
         list.push_back(part);
         indexStart = indexChar + 1;
         str.replace(indexChar, 1, charToReplace);
@@ -24,7 +24,7 @@ vector<string> split(string str, string separator) {
     }
 
     string lastPart = str.substr(indexStart);
-    cout << lastPart << endl;
+    //cout << lastPart << endl;
     list.push_back(lastPart);
     return list;
 }
@@ -35,12 +35,13 @@ void save(int **&matrix, int lines, int columns) {
     for (int i = 0; i < lines; i++) {
         for (int j = 0; j < columns; j++) {
             value = matrix[i][j];
+            /* if is the last column */
             if (j == columns - 1) {
                file << value;  
             } else {
                 file << value << ",";
             } 
-        }
+        }   
         file << endl;
     }
 }
@@ -72,13 +73,17 @@ int main() {
 
 
     ifstream myFile("saida.txt");
+    if (!myFile) {
+        cout << "Erro ao abrir arquivo" << endl;
+    }
     std::string myLine;
-    int indexChar;
-    int indexStart = 0;
     while (myFile.good()) {
         myFile >> myLine;
         //getline(myFile, myLine);
-        
         vector<string> list = split(myLine, ",");
+        for (int i = 0; i < list.size(); i++) {
+            cout << list.at(i) << " ";
+        }
+        cout << endl;
     }
 }

@@ -29,7 +29,9 @@ void Engine::run() {
     RenderWindow window(VideoMode(1000, 600), "Path finding!", Style::Close);
     window.setFramerateLimit(FPS);
 
-    AStar aStar(&g);
+    cout << "Endereço do window 1: " << &window << endl;
+
+    AStar aStar(&g, &window);
 
     while (window.isOpen())
     {
@@ -66,6 +68,8 @@ void Engine::input(Grid &grid, AStar &aStar, sf::RenderWindow &window) const {
                     }
                 } else if (Keyboard::isKeyPressed(Keyboard::R)) {
                     aStar.reset();
+                } else if (Keyboard::isKeyPressed(Keyboard::G)) {
+                    grid.saveInFile();
                 }
             case Event::MouseMoved:
             case Event::MouseButtonPressed:
