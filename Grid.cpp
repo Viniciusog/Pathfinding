@@ -2,7 +2,8 @@
 
 Grid::Grid(int unitSize, int screenWidth, int screenHeight) 
     : Matrix(screenHeight / unitSize, screenWidth / unitSize) {
-    
+    sf::Color color(140,230,138);
+    this->bgColor = color;
     this->start = nullptr;
     this->end = nullptr;
 
@@ -156,7 +157,7 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) {
             } else if (isStartNode(node)) {
                 rect.setFillColor(sf::Color::Magenta);
             } else {
-                rect.setFillColor(sf::Color::Green);
+                rect.setFillColor(getColor());
             } 
             window.draw(rect);
         }
@@ -192,10 +193,14 @@ void Grid::drawTo(vector<Node *> path, sf::RenderWindow &window) {
     window.draw(horizontalLine);
 }
 
+sf::Color Grid::getColor() const {
+    return this->bgColor;
+}
+
 void Grid::drawFindingPath(vector<Node *> openList, vector<Node *> closedList, sf::RenderWindow &window) {
     sf::RectangleShape rect;
     rect.setSize({(float) this->getColumns() * unitSize, (float) this->getLines() * unitSize});
-    rect.setFillColor(sf::Color::Green);
+    rect.setFillColor(getColor());
     window.draw(rect);
 
     rect.setSize({(float) unitSize, (float) unitSize});

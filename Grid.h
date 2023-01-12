@@ -19,6 +19,7 @@ class Grid : public Matrix<Node *> {
         void initGrid();
         void setUnitSize(int unitSize);
         int getUnitSize() const;
+        sf::Color getColor() const;
         void print() const;
         void drawTo(vector<Node *> path, sf::RenderWindow &window);
         void drawFindingPath(vector<Node *> openList, vector<Node *> closedList, sf::RenderWindow &window);
@@ -44,5 +45,6 @@ class Grid : public Matrix<Node *> {
         int height;
         Node *start;
         Node *end;
+        sf::Color bgColor;
 };
 #endif
