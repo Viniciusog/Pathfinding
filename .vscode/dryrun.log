@@ -1,4 +1,4 @@
-make -f c:\Users\SAMSUNG\Desktop\PathFinding\makefile --dry-run --keep-going --print-directory
+make -f c:\Users\SAMSUNG\Desktop\Legal\makefile --dry-run --always-make --keep-going --print-directory
 'make' n�o � reconhecido como um comando interno
 ou externo, um programa oper�vel ou um arquivo em lotes.
 

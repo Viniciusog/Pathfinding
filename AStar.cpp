@@ -57,7 +57,7 @@ vector<Node *> AStar::getNeighbours(Node *current) const {
                 int realX = current->getX() + x*grid->getUnitSize();
                 int realY = current->getY() + y*grid->getUnitSize();
 
-                // if coordinates is not valid, then neighbour will be nullptr
+                // if coordinates are not valid, then neighbour will be nullptr
                 // we can just add a verification before getting the node (future impl)
                 Node *neighbour = grid->getNodeFromWorldPoint(realX, realY);
                 if (neighbour != nullptr && !neighbour->isWall()) {

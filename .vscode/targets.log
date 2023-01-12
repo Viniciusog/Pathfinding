@@ -1,4 +1,4 @@
-make all -f c:\Users\SAMSUNG\Desktop\PathFinding\makefile --print-data-base --no-builtin-variables --no-builtin-rules --question
+make all -f c:\Users\SAMSUNG\Desktop\Legal\makefile --print-data-base --no-builtin-variables --no-builtin-rules --question
 'make' n�o � reconhecido como um comando interno
 ou externo, um programa oper�vel ou um arquivo em lotes.
 
